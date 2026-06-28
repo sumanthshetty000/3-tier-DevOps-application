@@ -6,25 +6,25 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Repository checked out successfully.'
+                git branch: 'main',
+                    url: 'https://github.com/sumanthshetty000/3-tier-DevOps-application.git'
             }
         }
 
-        stage('Jenkins Info') {
+        stage('Deploy') {
             steps {
-                sh 'pwd'
-                sh 'whoami'
-                sh 'hostname'
+                sh '''
+                ssh -o StrictHostKeyChecking=no ssm-user@10.0.2.171 << EOF
+
+                cd ~/devops-compose-project
+
+                git pull
+
+                docker compose up -d --build
+
+                EOF
+                '''
             }
         }
-
-        stage('Docker Info') {
-            steps {
-                sh 'docker --version'
-                sh 'docker compose version'
-            }
-        }
-
     }
-
 }
