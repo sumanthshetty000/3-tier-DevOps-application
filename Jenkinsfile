@@ -11,20 +11,16 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                sh '''
-                ssh -o StrictHostKeyChecking=no ssm-user@10.0.2.171 << EOF
-
-                cd ~/devops-compose-project
-
-                git pull
-
-                docker compose up -d --build
-
-                EOF
-                '''
-            }
-        }
+       stage('Deploy') {
+    steps {
+        sh '''
+        ssh -o StrictHostKeyChecking=no ssm-user@10.0.2.171 '
+        cd ~/devops-compose-project &&
+        git pull &&
+        docker compose up -d --build
+        '
+        '''
+    }
+}
     }
 }
