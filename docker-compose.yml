@@ -1,0 +1,50 @@
+services:
+
+  backend:
+    build: ./app
+    container_name: backend
+
+    env_file:
+      - .env
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - database
+
+    restart: unless-stopped
+
+    networks:
+      - devops-network
+
+  database:
+    image: mysql:8.0
+    container_name: database
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: devopsdb
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - devops-network
+
+volumes:
+  mysql-data:
+
+networks:
+  devops-network:
