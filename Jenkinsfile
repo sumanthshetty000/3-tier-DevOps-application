@@ -10,15 +10,18 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Jenkins Info') {
             steps {
-                echo 'Building application...'
+                sh 'pwd'
+                sh 'whoami'
+                sh 'hostname'
             }
         }
 
-        stage('Deploy') {
+        stage('Docker Info') {
             steps {
-                echo 'Deploying application...'
+                sh 'docker --version'
+                sh 'docker compose version'
             }
         }
 
